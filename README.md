@@ -1,6 +1,7 @@
 # react-router-4-compat &middot; ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) [![npm version](https://img.shields.io/npm/v/react-router-4-compat.svg?style=flat)](https://www.npmjs.com/package/react-router-4-compat)
 
-A version compatible with version 3 for [React-Router-4](https://reacttraining.com/react-router/).
+A wrapped version compatible with version 3 for [React-Router-4](https://reacttraining.com/react-router/).
+This project is based on react router 4. So you can use any react router 4 component together with this library.
 
 ## Installation
 
