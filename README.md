@@ -1,62 +1,61 @@
-# react-async-wrapper &middot; ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) [![npm version](https://img.shields.io/npm/v/react-async-wrapper.svg?style=flat)](https://www.npmjs.com/package/react-async-wrapper)
+# react-router-4-compat &middot; ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) [![npm version](https://img.shields.io/npm/v/react-router-4-compat.svg?style=flat)](https://www.npmjs.com/package/react-router-4-compat)
 
-Async component wrapper for [React](https://reactjs.org/).
+A version compatible with version 3 for [React-Router-4](https://reacttraining.com/react-router/).
 
 ## Installation
 
 Using [npm](https://www.npmjs.com/):
 
-    $ npm install --save react-async-wrapper
+    $ npm install --save react-router-4-compat
     
 ```jsx harmony
-import { AsyncComponent } from 'react-async-wrapper';
+import { Router4Compat as Router } from 'react-router-4-compat';
 
-//js version sleep.
-const sleep = async t => new Promise(resolve => setTimeout(resolve, t));
-//the component to be wrapped.
-const Demo = ({a, b, c, d}) => (
-    <ul>
-        <li>{`a: ${a}`}</li>
-        <li>{`b: ${b}`}</li>
-        <li>{`c: ${c}`}</li>
-        <li>{`d: ${d}`}</li>
-    </ul>
-);
-//a function creator, which create a function accept a method for updating the progress and return a promise.
-const progressReturn = (v, t) => async (updater) => {
-    const step = t / 100;
-    for (let i = 0; i < 100; ++i) {
-        await sleep(step);
-        updater(i / 100);
-    }
-    return v;
-};
-//a loading component, which accepts all resolved prop and their progress.
-const ProgressLoading = ({ a, b, c, d, progress }) => (
-    <ul>
-        <li>{`a: ${(progress.a * 100).toFixed()}%`}</li>
-        <li>{`b: ${(progress.b * 100).toFixed()}%`}</li>
-        <li>{`c: ${(progress.c * 100).toFixed()}%`}</li>
-        <li>{`d: ${(progress.d * 100).toFixed()}%`}</li>
-    </ul>
-);
-
-export const AsyncDemo = () => {
-    return (
-        <AsyncComponent
-         loadingComponent={ProgressLoading} //component show when loading
-         batch={false} //if true, only when all props resolved, the wrapped component will be render.
-         asyncProps={{ //async props
-            a: progressReturn(1, 4000), //must be a function. async function means async props.
-            b: progressReturn(2, 3000), //the function can accept a optional progress updater method.
-            c: progressReturn(3, 2000),
-            d: progressReturn(4, 1000),
-            e: () => 1, //a function return constant is also permit, which cause the prop is sync.
-        }}>
-            <Demo/>
-        </AsyncComponent>
+const Demo = () => {
+    const App = ({ children }) => (
+      <div>
+        <h1>App</h1>
+        <ul>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/inbox">Inbox</Link></li>
+        </ul>
+        {children}
+      </div>
     );
-};
-//if all props is sync, the component behavior the same as wrapped component.
+    const About = () => <h3>About</h3>;
+    const Inbox = ({ children }) => (
+      <div>
+        <h2>Inbox</h2>
+        {children || 'Welcome to your Inbox'}
+      </div>
+    );
+    const Message = ({ params }) => <h3>Message {params.id}</h3>;
+    const routes = {
+      path: '/',
+      component: App,
+      childRoutes: [
+        {
+          path: 'about',
+          component: About,
+        },
+        {
+          path: 'inbox',
+          component: Inbox,
+          childRoutes: [{
+            path: 'messages/:id',
+            component: Message,
+          }],
+        },
+      ],
+    };
+    return <Router routes={routes} history={createBrowserHistory('/')} />;
+  }
 
 ```
+
+##Progress
+Only plain route config is supported at this moment.
+OnUpdate and OnLeave is not supported yet, but onEnter has been supported. 
+static and Dynamic route config have all been supported. 
+components and getComponents are supported, but without test.
+components and getComponents are not permitted in the root route config.

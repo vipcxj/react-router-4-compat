@@ -27,6 +27,7 @@ const config = {
     globals: {
       react: 'React',
       'prop-types': 'PropTypes',
+      'react-router-dom': 'ReactRouterDOM',
     },
   },
   plugins: [
