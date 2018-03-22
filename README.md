@@ -54,7 +54,7 @@ const Demo = () => {
 
 ```
 
-##Progress
+## Progress
 
 - Only plain route config is supported at this moment.
 - OnUpdate and OnLeave is not supported yet, but onEnter has been supported. 
