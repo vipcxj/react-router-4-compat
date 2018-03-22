@@ -55,8 +55,9 @@ const Demo = () => {
 ```
 
 ##Progress
-Only plain route config is supported at this moment.
-OnUpdate and OnLeave is not supported yet, but onEnter has been supported. 
-static and Dynamic route config have all been supported. 
-components and getComponents are supported, but without test.
-components and getComponents are not permitted in the root route config.
+
+- Only plain route config is supported at this moment.
+- OnUpdate and OnLeave is not supported yet, but onEnter has been supported. 
+- static and Dynamic route config have all been supported. 
+- components and getComponents are supported, but without test.
+- components and getComponents are not permitted in the root route config.
