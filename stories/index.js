@@ -13,6 +13,9 @@ storiesOf('react router 4 compact', module)
         <ul>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/inbox">Inbox</Link></li>
+          <li><Link to="/inbox/messages/a">Message a</Link></li>
+          <li><Link to="/inbox/messages/b">Message b</Link></li>
+          <li><Link to="/inbox/messages/c">Message c</Link></li>
         </ul>
         {children}
       </div>
@@ -43,5 +46,5 @@ storiesOf('react router 4 compact', module)
         },
       ],
     };
-    return <Router routes={routes} history={createBrowserHistory('/')} />;
+    return <Router routes={routes} history={createBrowserHistory({ basename: '/' })} />;
   });

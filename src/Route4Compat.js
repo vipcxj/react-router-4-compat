@@ -52,7 +52,7 @@ const createRoutePromise = (state, route) => {
   }));
 };
 
-export const createRoutes = (routes, onError) => routes.map((route) => {
+export const createRoutes = (routes, onError, root) => routes.map((route) => {
   const {
     path,
     component,
@@ -84,7 +84,7 @@ export const createRoutes = (routes, onError) => routes.map((route) => {
             if (onEnter) {
               onEnter(routeState, history.replace);
             }
-            return <Route4Compat {...props} state={routeState} route={route} onError={onError} />;
+            return <Route4Compat {...props} state={routeState} route={route} routes={root} onError={onError} />;
           }
           const asyncJobs = [];
           if (onEnter) {
@@ -110,7 +110,7 @@ export const createRoutes = (routes, onError) => routes.map((route) => {
                 route: () => createRoutePromise(routeState, route),
               }}
             >
-              <Route4Compat {...props} state={routeState} onError={onError} />
+              <Route4Compat {...props} state={routeState} routes={root} onError={onError} />
             </AsyncComponent>
           );
         }
@@ -125,6 +125,7 @@ class Route4Compat extends React.Component {
   render() {
     const {
       route,
+      routes: root,
       state,
       onError,
       ...rest
@@ -170,7 +171,7 @@ class Route4Compat extends React.Component {
               })),
           }}
         >
-          <Route4Compat state={state} onError={onError} />
+          <Route4Compat routes={root} state={state} onError={onError} {...rest} />
         </AsyncComponent>
       );
     }
@@ -226,14 +227,18 @@ class Route4Compat extends React.Component {
     });
     const hasChildren = some(routes, r => !!matchPath(state.location.pathname, r, state.match));
     return (hasChildren && routes && routes.length > 0) ? (
-      <Comp {...rest} {...comps}>
+      <Comp {...rest} router={this.context.router} params={state.match.params} location={state.location} routes={root} {...comps}>
         <Switch>
-          { createRoutes(routes, onError) }
+          { createRoutes(routes, onError, root) }
         </Switch>
       </Comp>
-    ) : <Comp {...rest} {...comps} />;
+    ) : <Comp {...rest} router={this.context.router} params={state.match.params} location={state.location} routes={root} {...comps} />;
   }
 }
+
+Route4Compat.contextTypes = {
+  router: PropTypes.object,
+};
 
 export const RoutePropType = PropTypes.shape({
   path: PropTypes.string,
@@ -250,12 +255,14 @@ export const RoutePropType = PropTypes.shape({
 
 Route4Compat.propTypes = {
   route: RoutePropType,
+  routes: PropTypes.arrayOf(RoutePropType),
   onError: PropTypes.func,
   state: PropTypes.object,
 };
 
 Route4Compat.defaultProps = {
   route: {},
+  routes: [],
   onError: () => null,
   state: {},
 };

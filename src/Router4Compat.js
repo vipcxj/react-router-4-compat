@@ -13,10 +13,11 @@ class Router4Compat extends React.Component {
   }
   render() {
     const { routes, history, onError } = this.props;
+    const root = castArray(routes);
     return (
       <Router history={history}>
         <Switch>
-          { createRoutes(castArray(routes), onError) }
+          { createRoutes(castArray(routes), onError, root) }
         </Switch>
       </Router>
     );
