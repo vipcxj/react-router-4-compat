@@ -48,7 +48,7 @@ const withRouter4Compat = (Component, { withRef = false } = {}) => {
     wrappedComponentRef: PropTypes.func,
   };
   C.contextTypes = {
-    routes: PropTypes.object,
+    routes: PropTypes.array,
     router: PropTypes.object,
   };
 

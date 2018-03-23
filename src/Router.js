@@ -6,10 +6,18 @@ import { castArray } from './utils';
 import { createRoutes, RoutePropType } from './Route';
 
 class Router4Compat extends React.Component {
+  constructor(props, ...args) {
+    // noinspection JSCheckFunctionSignatures
+    super(props, ...args);
+    this.routes = castArray(props.routes);
+  }
   getChildContext() {
     return {
-      routes: this.props.routes,
+      routes: this.routes,
     };
+  }
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.routes = nextProps.routes;
   }
   componentDidCatch(error, info) {
     const { onError } = this.props;
@@ -18,12 +26,12 @@ class Router4Compat extends React.Component {
     }
   }
   render() {
-    const { routes, history, onError } = this.props;
-    const root = castArray(routes);
+    const { history, onError } = this.props;
+    const root = this.routes;
     return (
       <Router history={history}>
         <Switch>
-          { createRoutes(castArray(routes), onError, root) }
+          { createRoutes(this.routes, onError, root) }
         </Switch>
       </Router>
     );
@@ -42,11 +50,11 @@ Router4Compat.defaultProps = {
 };
 
 Router4Compat.contextTypes = {
-  routes: PropTypes.object,
+  routes: PropTypes.array,
 };
 
 Router4Compat.childContextTypes = {
-  routes: PropTypes.object,
+  routes: PropTypes.array,
 };
 
 export default Router4Compat;
