@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { createBrowserHistory } from 'history';
 import { Link } from 'react-router-dom';
-import { Router4Compat as Router } from '../src';
+import { Router4Compat as Router, withRouter4Compat as withRouter } from '../src';
 
 storiesOf('react router 4 compact', module)
   .add('basic usage', () => {
@@ -43,6 +43,30 @@ storiesOf('react router 4 compact', module)
             path: 'messages/:id',
             component: Message,
           }],
+        },
+      ],
+    };
+    return <Router routes={routes} history={createBrowserHistory({ basename: '/' })} />;
+  })
+  .add('with router', () => {
+    const App = ({ children }) => (
+      <div>
+        <h1>App</h1>
+        <ul>
+          <li><Link to="/with-router/deep-message">Deep Message</Link></li>
+        </ul>
+        {children}
+      </div>
+    );
+    const Message = withRouter(({ params }) => <h3>Message {params.msg}</h3>);
+    const MessageBox = () => <Message />;
+    const routes = {
+      path: '/',
+      component: App,
+      childRoutes: [
+        {
+          path: 'with-router/:msg',
+          component: MessageBox,
         },
       ],
     };
