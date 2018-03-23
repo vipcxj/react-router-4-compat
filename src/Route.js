@@ -125,7 +125,7 @@ const makePath = (base, path) => {
   if (!path) {
     return base || '/';
   }
-  if(path.startsWith('/')) {
+  if (path.startsWith('/')) {
     return path;
   }
   return `${base === '/' ? '' : base}/${path}`;
