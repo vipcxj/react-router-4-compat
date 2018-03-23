@@ -82,16 +82,13 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
           if (component
             && (indexRoute || !getIndexRoute)
             && (childRoutes || !getChildRoutes)
-            && (!onEnter || onEnter.length < 3)) {
-            if (onEnter) {
-              onEnter(routeState, history.replace);
-            }
+            && !onEnter) {
             return <Route4Compat {...props} state={routeState} route={route} routes={root} onError={onError} />;
           }
           const asyncJobs = [];
           if (onEnter) {
-            if (onEnter.length >= 3) {
-              asyncJobs.push(() => new Promise((resolve, reject) => {
+            asyncJobs.push(() => new Promise((resolve, reject) => {
+              if (onEnter.length >= 3) {
                 onEnter(routeState, history.replace, (err) => {
                   if (err) {
                     reject(err);
@@ -99,10 +96,11 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
                     resolve();
                   }
                 });
-              }));
-            } else {
-              onEnter(routeState, history.replace);
-            }
+              } else {
+                onEnter(routeState, history.replace);
+                resolve();
+              }
+            }));
           }
           return (
             <AsyncComponent
