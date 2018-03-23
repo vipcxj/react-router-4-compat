@@ -33,6 +33,7 @@
     "prop-types": ">= 15"
   },
   "dependencies": {
+    "hoist-non-react-statics": "^2.5.0",
     "react-async-wrapper": "^0.0.7"
   },
   "devDependencies": {

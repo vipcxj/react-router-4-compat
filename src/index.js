@@ -1,4 +1,5 @@
-import Route4Compat from './Route4Compat';
-import Router4Compat from './Router4Compat';
+import Route4Compat from './Route';
+import Router4Compat from './Router';
+import withRouter4Compat from './withRouter';
 
-export { Router4Compat, Route4Compat };
+export { Router4Compat, Route4Compat, withRouter4Compat };
