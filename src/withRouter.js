@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import Route from 'react-router/Route';
 import hoistStatics from 'hoist-non-react-statics';
 
+const isStateless = Component => !Component.prototype.render;
+
 const withRouter4Compat = (Component, { withRef = false } = {}) => {
   class C extends React.Component {
     // noinspection JSUnusedGlobalSymbols
@@ -28,7 +30,14 @@ const withRouter4Compat = (Component, { withRef = false } = {}) => {
         <Route
           children={(routeComponentProps) => {
             const { match, location } = routeComponentProps;
-            return (<Component
+            return isStateless(Component) ? (<Component
+              {...remainingProps}
+              {...routeComponentProps}
+              router={this.context.router}
+              routes={this.context.routes}
+              params={match.params}
+              location={location}
+            />) : (<Component
               {...remainingProps}
               {...routeComponentProps}
               router={this.context.router}
