@@ -30,6 +30,7 @@
   "peerDependencies": {
     "react-router-dom": ">=4",
     "react": ">=15",
+    "react-router": ">=4",
     "prop-types": ">= 15"
   },
   "dependencies": {
@@ -67,6 +68,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "rollup": "^0.57.1",
     "rollup-analyzer-plugin": "^1.1.1",

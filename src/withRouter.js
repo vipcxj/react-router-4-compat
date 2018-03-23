@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props,react/no-children-prop */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Route from 'react-router-dom/Route';
+import Route from 'react-router/Route';
 import hoistStatics from 'hoist-non-react-statics';
 
 const withRouter4Compat = (Component) => {

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, matchPath } from 'react-router-dom';
+import Switch from 'react-router/Switch';
+import Route from 'react-router/Route';
+import matchPath from 'react-router/matchPath';
 import { AsyncComponent } from 'react-async-wrapper';
 import { mapValues, assignWith, some } from './utils';
 

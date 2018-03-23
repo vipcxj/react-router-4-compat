@@ -27,7 +27,10 @@ const config = {
     globals: {
       react: 'React',
       'prop-types': 'PropTypes',
-      'react-router-dom': 'ReactRouterDOM',
+      'react-router/Switch': 'Switch',
+      'react-router/Route': 'Route',
+      'react-router/Router': 'Router',
+      'react-router/matchPath': 'matchPath',
     },
   },
   plugins: [

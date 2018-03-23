@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Router } from 'react-router-dom';
+import Switch from 'react-router/Switch';
+import Router from 'react-router/Router';
 import { castArray } from './utils';
 import { createRoutes, RoutePropType } from './Route';
 
