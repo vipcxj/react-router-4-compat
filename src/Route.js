@@ -121,7 +121,15 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
   );
 }).filter(v => v);
 
-const makePath = (base, path) => `${base === '/' ? '' : base}/${path || ''}`;
+const makePath = (base, path) => {
+  if (!path) {
+    return base || '/';
+  }
+  if(path.startsWith('/')) {
+    return path;
+  }
+  return `${base === '/' ? '' : base}/${path}`;
+};
 
 class Route4Compat extends React.Component {
   render() {
