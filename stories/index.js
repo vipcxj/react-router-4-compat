@@ -53,7 +53,9 @@ storiesOf('react router 4 compact', module)
       <div>
         <h1>App</h1>
         <ul>
-          <li><Link to="/with-router/deep-message">Deep Message</Link></li>
+          <li><Link to="/with-router/message-1">Message-1</Link></li>
+          <li><Link to="/with-router/message-2">Message-2</Link></li>
+          <li><Link to="/with-router/message-3">Message-3</Link></li>
         </ul>
         {children}
       </div>

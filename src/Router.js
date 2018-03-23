@@ -44,4 +44,8 @@ Router4Compat.contextTypes = {
   routes: PropTypes.object,
 };
 
+Router4Compat.childContextTypes = {
+  routes: PropTypes.object,
+};
+
 export default Router4Compat;
