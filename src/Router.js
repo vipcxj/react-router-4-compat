@@ -2,9 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Router } from 'react-router-dom';
 import { castArray } from './utils';
-import { createRoutes, RoutePropType } from './Route4Compat';
+import { createRoutes, RoutePropType } from './Route';
 
 class Router4Compat extends React.Component {
+  getChildContext() {
+    return {
+      routes: this.props.routes,
+    };
+  }
   componentDidCatch(error, info) {
     const { onError } = this.props;
     if (onError) {
@@ -33,6 +38,10 @@ Router4Compat.propTypes = {
 Router4Compat.defaultProps = {
   routes: [],
   onError: () => null,
+};
+
+Router4Compat.contextTypes = {
+  routes: PropTypes.object,
 };
 
 export default Router4Compat;
