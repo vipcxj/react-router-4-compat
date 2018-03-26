@@ -6,6 +6,24 @@ import { castArray } from './utils';
 import { createRoutes, RoutePropType } from './Route';
 
 class Router4Compat extends React.Component {
+  constructor(props, context) {
+    // noinspection JSCheckFunctionSignatures
+    super(props, context);
+    this.state = {
+      routes: [],
+    };
+  }
+  getChildContext() {
+    return {
+      routesCompat: this.state.routes,
+      routesUpdater: this.routesUpdater,
+    };
+  }
+  routesUpdater = (routes) => {
+    this.setState({
+      routes,
+    });
+  };
   componentDidCatch(error, info) {
     const { onError } = this.props;
     if (onError) {
@@ -33,6 +51,11 @@ Router4Compat.propTypes = {
 Router4Compat.defaultProps = {
   routes: [],
   onError: () => null,
+};
+
+Router4Compat.childContextTypes = {
+  routesCompat: PropTypes.arrayOf(RoutePropType),
+  routesUpdater: PropTypes.func,
 };
 
 export default Router4Compat;
