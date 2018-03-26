@@ -29,19 +29,19 @@ const withRouter4Compat = (Component, { withRef = false } = {}) => {
       return (
         <Route
           children={(routeComponentProps) => {
-            const { match, location } = routeComponentProps;
+            const { match, location, history } = routeComponentProps;
             return isStateless(Component) ? (<Component
               {...remainingProps}
               {...routeComponentProps}
-              router={this.context.router}
-              routes={this.context.routes}
+              router={history}
+              routes={this.context.routesCompat}
               params={match.params}
               location={location}
             />) : (<Component
               {...remainingProps}
               {...routeComponentProps}
-              router={this.context.router}
-              routes={this.context.routes}
+              router={history}
+              routes={this.context.routesCompat}
               params={match.params}
               location={location}
               ref={wrappedComponentRefCompat}
@@ -57,8 +57,7 @@ const withRouter4Compat = (Component, { withRef = false } = {}) => {
     wrappedComponentRef: PropTypes.func,
   };
   C.contextTypes = {
-    routes: PropTypes.array,
-    router: PropTypes.object,
+    routesCompat: PropTypes.array,
   };
 
   return hoistStatics(C, Component);

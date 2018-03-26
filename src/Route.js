@@ -144,6 +144,11 @@ const makePath = (base, path) => {
 };
 
 class Route4Compat extends React.Component {
+  getChildContext() {
+    return {
+      routesCompat: this.props.routes,
+    };
+  }
   render() {
     const {
       route,
@@ -290,6 +295,14 @@ Route4Compat.defaultProps = {
   routes: [],
   onError: () => null,
   state: {},
+};
+
+Route4Compat.contextTypes = {
+  routesCompat: PropTypes.array,
+};
+
+Route4Compat.childContextTypes = {
+  routesCompat: PropTypes.array,
 };
 
 export default Route4Compat;
