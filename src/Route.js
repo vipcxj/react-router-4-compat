@@ -54,7 +54,20 @@ const createRoutePromise = (state, route) => {
   }));
 };
 
-export const createRoutes = (routes, onError, root) => routes.map((route) => {
+const createRoutePath = (root, route) => {
+  if (root.length === 0 || root[root.length - 1].path !== route.path) {
+    return [...root, route];
+  } else {
+    return root;
+  }
+};
+
+const compatRouteComponent = (route, root) => Component => (props) => {
+  const { match, location, history } = props;
+  return <Component {...props} router={history} params={match.params} location={location} routes={createRoutePath(root, route)} />;
+};
+
+export const createRoutes = (routes, onError, root = []) => routes.map((route) => {
   const {
     path,
     component,
@@ -69,6 +82,7 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
   if (!component && !getComponent && !onEnter) {
     return null;
   }
+  const newRoot = createRoutePath(root, route);
   return (
     <Route
       key={path || 0}
@@ -83,7 +97,7 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
             && (indexRoute || !getIndexRoute)
             && (childRoutes || !getChildRoutes)
             && !onEnter) {
-            return <Route4Compat {...props} state={routeState} route={route} routes={root} onError={onError} />;
+            return <Route4Compat {...props} state={routeState} route={route} routes={newRoot} onError={onError} />;
           }
           const asyncJobs = [];
           if (onEnter) {
@@ -110,7 +124,7 @@ export const createRoutes = (routes, onError, root) => routes.map((route) => {
                 route: () => createRoutePromise(routeState, route),
               }}
             >
-              <Route4Compat {...props} state={routeState} routes={root} onError={onError} />
+              <Route4Compat {...props} state={routeState} routes={newRoot} onError={onError} />
             </AsyncComponent>
           );
         }
@@ -224,23 +238,26 @@ class Route4Compat extends React.Component {
     }
     const comps = mapValues(components, compRoutes => (props) => {
       if (compRoutes.length === 1) {
-        return <Route {...props} path={compRoutes[0].path} component={compRoutes[0].component} />;
+        return <Route {...props} path={compRoutes[0].path} component={compatRouteComponent(compRoutes[0], root)(compRoutes[0].component)} />;
       } else {
         return (
           <Switch>
-            { compRoutes.map(compRoute => <Route {...props} path={compRoute.path} component={compRoute.component} />) }
+            {
+              compRoutes.map(compRoute =>
+                <Route {...props} path={compRoute.path} component={compatRouteComponent(compRoute, root)(compRoute.component)} />)
+            }
           </Switch>
         );
       }
     });
     const hasChildren = some(routes, r => !!matchPath(state.location.pathname, r, state.match));
     return (hasChildren && routes && routes.length > 0) ? (
-      <Comp {...rest} router={this.context.router} params={state.match.params} location={state.location} routes={root} {...comps}>
+      <Comp {...rest} router={state.history} params={state.match.params} location={state.location} routes={root} {...comps}>
         <Switch>
           { createRoutes(routes, onError, root) }
         </Switch>
       </Comp>
-    ) : <Comp {...rest} router={this.context.router} params={state.match.params} location={state.location} routes={root} {...comps} />;
+    ) : <Comp {...rest} router={state.history} params={state.match.params} location={state.location} routes={root} {...comps} />;
   }
 }
 

@@ -31,7 +31,7 @@ class Router4Compat extends React.Component {
     return (
       <Router history={history}>
         <Switch>
-          { createRoutes(this.routes, onError, root) }
+          { createRoutes(this.routes, onError, []) }
         </Switch>
       </Router>
     );
