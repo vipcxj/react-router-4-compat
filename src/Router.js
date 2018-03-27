@@ -24,12 +24,6 @@ class Router4Compat extends React.Component {
       routes,
     });
   };
-  componentDidCatch(error, info) {
-    const { onError } = this.props;
-    if (onError) {
-      onError(error);
-    }
-  }
   render() {
     const { routes, history, onError } = this.props;
     return (
