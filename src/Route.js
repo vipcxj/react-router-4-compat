@@ -130,12 +130,44 @@ export const makePath = (base, path) => {
   return `${base === '/' ? '' : base}/${path}`;
 };
 
+const shallowEqual = (obj1, obj2) => {
+  if (obj1 === obj2) {
+    return true;
+  }
+  if (!obj1 || !obj2) {
+    return false;
+  }
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  for (let i = 0; i < keys1.length; ++i) {
+    const key = keys1[i];
+    if (obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 class Route4Compat extends React.Component {
   componentDidMount() {
     const { state, route, routeStack } = this.props;
     if (state.match && state.match.isExact) {
       this.context.routesUpdater([...routeStack, route]);
     }
+  }
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    // noinspection JSUnusedLocalSymbols
+    const { match: nextMatch, params: nextParams, ...nextRest } = nextProps;
+    // noinspection JSUnusedLocalSymbols
+    const { match: thisMatch, params: thisParams, ...thisRest } = this.props;
+    const { params: nextMatchParams, ...nextMatchRest } = nextMatch || {};
+    const { params: thisMatchParams, ...thisMatchRest } = thisMatch || {};
+    return !shallowEqual(thisMatchParams, nextMatchParams)
+      || !shallowEqual(thisMatchRest, nextMatchRest)
+      || !shallowEqual(thisRest, nextRest);
   }
   componentWillUnmount() {
     const { route } = this.props;
