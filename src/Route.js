@@ -110,6 +110,7 @@ export const createRoutes = (routes, onError, routeStack = []) => routes.map((ro
               asyncProps={{
                 route: () => createRoutePromise(routeState, route),
               }}
+              reloadOnUpdate={false}
             >
               <Route4Compat {...props} routeStack={routeStack} state={routeState} onError={onError} />
             </AsyncComponent>
@@ -222,6 +223,7 @@ class Route4Compat extends React.Component {
                 })),
               })),
           }}
+          reloadOnUpdate={false}
         >
           <Route4Compat routeStack={routeStack} state={state} onError={onError} {...rest} />
         </AsyncComponent>
