@@ -105,6 +105,7 @@ export const createRoutes = (routes, onError, routeStack = []) => routes.map((ro
           }
           return (
             <AsyncComponent
+              batch
               onError={onError}
               asyncJobs={asyncJobs}
               asyncProps={{
@@ -202,6 +203,7 @@ class Route4Compat extends React.Component {
       // noinspection RequiredAttributes
       return (
         <AsyncComponent
+          batch
           onError={onError}
           asyncProps={{
             route: async () => Promise.all((childRoutes || [])
