@@ -161,12 +161,18 @@ class Route4Compat extends React.Component {
   }
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     // noinspection JSUnusedLocalSymbols
-    const { match: nextMatch, params: nextParams, ...nextRest } = nextProps;
+    const {
+      match: nextMatch, params: nextParams, state: nState, ...nextRest
+    } = nextProps;
     // noinspection JSUnusedLocalSymbols
-    const { match: thisMatch, params: thisParams, ...thisRest } = this.props;
+    const {
+      match: thisMatch, params: thisParams, state: tState, ...thisRest
+    } = this.props;
     const { params: nextMatchParams, ...nextMatchRest } = nextMatch || {};
     const { params: thisMatchParams, ...thisMatchRest } = thisMatch || {};
-    return !shallowEqual(thisMatchParams, nextMatchParams)
+    return !shallowEqual(this.state, nextState)
+      || !shallowEqual(this.context, nextContext)
+      || !shallowEqual(thisMatchParams, nextMatchParams)
       || !shallowEqual(thisMatchRest, nextMatchRest)
       || !shallowEqual(thisRest, nextRest);
   }
