@@ -111,6 +111,7 @@ export const createRoutes = (routes, onError, routeStack = []) => routes.map((ro
               asyncProps={{
                 route: () => createRoutePromise(routeState, route),
               }}
+              loadingComponent={() => null}
               reloadOnUpdate={false}
             >
               <Route4Compat {...props} routeStack={routeStack} state={routeState} onError={onError} />
@@ -154,20 +155,28 @@ const shallowEqual = (obj1, obj2) => {
 };
 
 class Route4Compat extends React.Component {
-  componentDidMount() {
-    const { state, route, routeStack } = this.props;
-    if (state.match && state.match.isExact) {
-      this.context.routesUpdater([...routeStack, route]);
-    }
+  componentWillMount() {
+    this.context.routesCompat = [...this.props.routeStack, this.props.route];
+    this.context.routesUpdater(this.context.routesCompat);
   }
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     // noinspection JSUnusedLocalSymbols
     const {
-      match: nextMatch, params: nextParams, state: nState, ...nextRest
+      match: nextMatch,
+      params: nextParams,
+      state: nState,
+      route: nextRoute,
+      routeStack: nextRouteStack,
+      ...nextRest
     } = nextProps;
     // noinspection JSUnusedLocalSymbols
     const {
-      match: thisMatch, params: thisParams, state: tState, ...thisRest
+      match: thisMatch,
+      params: thisParams,
+      state: tState,
+      route: thisRoute,
+      routeStack: thisRouteStack,
+      ...thisRest
     } = this.props;
     const { params: nextMatchParams, ...nextMatchRest } = nextMatch || {};
     const { params: thisMatchParams, ...thisMatchRest } = thisMatch || {};
@@ -175,12 +184,9 @@ class Route4Compat extends React.Component {
       || !shallowEqual(this.context, nextContext)
       || !shallowEqual(thisMatchParams, nextMatchParams)
       || !shallowEqual(thisMatchRest, nextMatchRest)
+      || !shallowEqual(thisRoute, nextRoute)
+      || !shallowEqual(thisRouteStack, nextRouteStack)
       || !shallowEqual(thisRest, nextRest);
-  }
-  componentWillUnmount() {
-    const { route } = this.props;
-    const { routesCompat } = this.context;
-    this.context.routesUpdater(routesCompat.filter(r => r !== route));
   }
   render() {
     const {
@@ -205,6 +211,7 @@ class Route4Compat extends React.Component {
         <AsyncComponent
           batch
           onError={onError}
+          loadingComponent={() => null}
           asyncProps={{
             route: async () => Promise.all((childRoutes || [])
                 .map((childRoute) => {

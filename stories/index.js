@@ -5,6 +5,31 @@ import { createBrowserHistory } from 'history';
 import { Link } from 'react-router-dom';
 import { Router4Compat as Router, withRouter4Compat as withRouter } from '../src';
 
+// const addLifeCycle = (render, preRen, cwm, cdm, cwu, cdu, cwum) => {
+//   class C extends React.PureComponent {
+//     componentWillMount() {
+//       return cwm && cwm(this.props, this.state, this.context);
+//     }
+//     componentDidMount() {
+//       return cdm && cdm(this.props, this.state, this.context);
+//     }
+//     componentWillUpdate(nextProps, nextState, nextContext) {
+//       return cwu && cwu(this.props, nextProps, this.state, nextState, this.context, nextContext);
+//     }
+//     componentDidUpdate(prevProps, prevState, prevContext) {
+//       return cdu && cdu(prevProps, this.props, prevState, this.state, prevContext, this.context);
+//     }
+//     componentWillUnmount() {
+//       return cwum && cwum(this.props, this.state, this.context)
+//     }
+//     render() {
+//       preRen(this.props, this.state, this.context);
+//       return render(this.props, this.state, this.context);
+//     }
+//   }
+//   return C;
+// };
+
 storiesOf('react router 4 compact', module)
   .add('basic usage', () => {
     const App = ({ children }) => (
@@ -21,13 +46,45 @@ storiesOf('react router 4 compact', module)
       </div>
     );
     const About = () => <h3>About</h3>;
+    // const About = addLifeCycle(
+    //   () => <h3>About</h3>,
+    //   ({ routes }) => console.log(routes),
+    //   () => console.log('About: cwm'),
+    //   () => console.log('About: cdm'),
+    //   () => console.log('About: cwu'),
+    //   () => console.log('About: cdu'),
+    //   () => console.log('About: cwum'),
+    // );
     const Inbox = ({ children }) => (
       <div>
         <h2>Inbox</h2>
         {children || 'Welcome to your Inbox'}
       </div>
     );
+    // const Inbox = addLifeCycle(
+    //   ({ children }) => (
+    //     <div>
+    //       <h2>Inbox</h2>
+    //       {children || 'Welcome to your Inbox'}
+    //     </div>
+    //   ),
+    //   ({ routes }) => console.log(routes),
+    //   () => console.log('Inbox: cwm'),
+    //   () => console.log('Inbox: cdm'),
+    //   () => console.log('Inbox: cwu'),
+    //   () => console.log('Inbox: cdu'),
+    //   () => console.log('Inbox: cwum'),
+    // );
     const Message = ({ params }) => <h3>Message {params.id}</h3>;
+    // const Message = addLifeCycle(
+    //   ({ params }) => <h3>Message {params.id}</h3>,
+    //   ({ routes }) => console.log(routes),
+    //   () => console.log('Message: cwm'),
+    //   () => console.log('Message: cdm'),
+    //   () => console.log('Message: cwu'),
+    //   () => console.log('Message: cdu'),
+    //   () => console.log('Message: cwum'),
+    // );
     const routes = {
       path: '/',
       component: App,
