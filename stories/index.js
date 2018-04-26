@@ -48,6 +48,30 @@ storiesOf('react router 4 compact', module)
     };
     return <Router routes={routes} history={createBrowserHistory({ basename: '/' })} />;
   })
+  .add('lazy route', () => {
+    const App = ({ children }) => (
+      <div>
+        <h1>Pleas click the hello world link.</h1>
+        <ul>
+          <li><Link to="/lazy-route/hello-world">Hello World!</Link></li>
+        </ul>
+        {children}
+      </div>
+    );
+    const routes = {
+      path: '/',
+      component: App,
+      childRoutes: [
+        {
+          path: 'lazy-route/hello-world',
+          getComponent(ignored, cb) {
+            import('./HelloWorld').then(route => cb(null, route.default));
+          },
+        },
+      ],
+    };
+    return <Router routes={routes} history={createBrowserHistory({ basename: '/' })} />;
+  })
   .add('with router', () => {
     const App = ({ children }) => (
       <div>
