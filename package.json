@@ -1,6 +1,6 @@
 {
   "name": "react-router-4-compat",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A wrapped version of react router 4 which compatible with react router 3",
   "main": "cjs/index.js",
   "module": "es/index.js",
