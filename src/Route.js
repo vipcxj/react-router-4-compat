@@ -318,7 +318,7 @@ Route4Compat.contextTypes = {
 
 export const RoutePropType = PropTypes.shape({
   path: PropTypes.string,
-  component: PropTypes.oneOfType(PropTypes.func, PropTypes.object),
+  component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   getComponent: PropTypes.func,
   indexRoute: PropTypes.object,
   getIndexRoute: PropTypes.func,
