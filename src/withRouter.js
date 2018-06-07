@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Route from 'react-router/Route';
 import hoistStatics from 'hoist-non-react-statics';
 
-const isStateless = Component => !Component.prototype.render;
+const isStateless = Component => !Component.prototype || !Component.prototype.render;
 
 const withRouter4Compat = (Component, { withRef = false } = {}) => {
   class C extends React.Component {
