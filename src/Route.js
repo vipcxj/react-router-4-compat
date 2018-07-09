@@ -159,6 +159,31 @@ class Route4Compat extends React.Component {
     this.context.routesCompat = [...this.props.routeStack, this.props.route];
     this.context.routesUpdater(this.context.routesCompat);
   }
+  componentWillReceiveProps(nextProps, ignored) {
+    const {
+      route, state, history, onError,
+    } = this.props;
+    const { onChange } = route;
+    if (onChange) {
+      if (onChange.length >= 4) {
+        new Promise((resolve, reject) => {
+          onChange(state, nextProps.state, history.replace, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        }).catch(onError);
+      } else {
+        try {
+          onChange(state, nextProps.state, history.replace);
+        } catch (e) {
+          onError(e);
+        }
+      }
+    }
+  }
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     // noinspection JSUnusedLocalSymbols
     const {
@@ -187,6 +212,17 @@ class Route4Compat extends React.Component {
       || !shallowEqual(thisRoute, nextRoute)
       || !shallowEqual(thisRouteStack, nextRouteStack)
       || !shallowEqual(thisRest, nextRest);
+  }
+  componentWillUnmount() {
+    const { route, state, onError } = this.props;
+    const { onLeave } = route;
+    if (onLeave) {
+      try {
+        onLeave(state);
+      } catch (e) {
+        onError(e);
+      }
+    }
   }
   render() {
     const {
@@ -324,6 +360,8 @@ export const RoutePropType = PropTypes.shape({
   getIndexRoute: PropTypes.func,
   childRoutes: PropTypes.arrayOf(PropTypes.object),
   getChildRoutes: PropTypes.func,
+  onLeave: PropTypes.func,
+  onChange: PropTypes.func,
   exact: PropTypes.bool,
   strict: PropTypes.bool,
   sensitive: PropTypes.bool,
